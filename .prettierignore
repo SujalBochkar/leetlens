@@ -1,0 +1,22 @@
+# Dependency directories
+node_modules/
+
+# Static Folder
+static/
+jest-coverage/
+public/
+coverage/
+
+# Build directory
+dist/
+build/
+.next/
+out
+
+# Logs
+*.log
+npm-debug.log*
+
+#macOS custom attributes
+.DS_Store
+*/.DS_Store

@@ -1,0 +1,153 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client"
+    output   = "./generated"
+}
+
+datasource db {
+    provider = "mongodb"
+}
+
+model Problem {
+    id             String   @id @default(auto()) @map("_id") @db.ObjectId
+    title          String
+    titleSlug      String   @unique
+    difficulty     String?
+    acceptanceRate String?
+    topics         String[]
+
+    // Relation back to company-specific stats
+    companyStats CompanyProblem[]
+
+    createdAt             DateTime              @default(now())
+    updatedAt             DateTime              @updatedAt
+    userProblemProgresses UserProblemProgress[]
+}
+
+model Company {
+    id      String  @id @default(auto()) @map("_id") @db.ObjectId
+    name    String  @unique
+    slug    String  @unique
+    logoUrl String?
+
+    problems CompanyProblem[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model CompanyProblem {
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String  @db.ObjectId
+
+    problem   Problem @relation(fields: [problemId], references: [id])
+    problemId String  @db.ObjectId
+
+    // Company-specific metrics
+    priorityScore    Float
+    frequency30Days  Int   @default(0)
+    frequency3Months Int   @default(0)
+    frequency6Months Int   @default(0)
+    frequencyAllTime Int   @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([companyId, problemId]) // A company can't have the same problem listed twice
+    @@index([companyId, priorityScore(sort: Desc)]) // Efficient sorting
+}
+
+// ==================== USER & AUTH ====================
+
+model User {
+    id            String    @id @default(auto()) @map("_id") @db.ObjectId
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+
+    accounts Account[]
+    sessions Session[]
+
+    // User's Learning Data
+    problemProgress UserProblemProgress[]
+    lists           UserList[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Account {
+    id                String  @id @default(auto()) @map("_id") @db.ObjectId
+    userId            String  @db.ObjectId
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String? @db.String
+    access_token      String? @db.String
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String? @db.String
+    session_state     String?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    sessionToken String   @unique
+    userId       String   @db.ObjectId
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ==================== USER PROGRESS ====================
+
+model UserProblemProgress {
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String @db.ObjectId
+
+    problem   Problem @relation(fields: [problemId], references: [id])
+    problemId String  @db.ObjectId
+
+    status     String  @default("TODO") // TODO, SOLVED, REVISING
+    notes      String?
+    difficulty String? // User's personal difficulty rating
+
+    nextRevisionDate DateTime?
+    lastSolvedAt     DateTime?
+
+    isFiber Boolean @default(false) // "Mark as Starred/Important"
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([userId, problemId])
+}
+
+model UserList {
+    id          String  @id @default(auto()) @map("_id") @db.ObjectId
+    title       String
+    description String?
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String @db.ObjectId
+
+    // Store problem IDs in the list
+    problemIds String[] @db.ObjectId
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
