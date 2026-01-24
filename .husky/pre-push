@@ -1,1 +1,1 @@
-npx prisma generate && npx tsc --noEmit
+npx tsc --noEmit
