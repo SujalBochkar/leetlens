@@ -12,6 +12,7 @@ datasource db {
 
 model Problem {
     id             String  @id @default(cuid())
+    questionNumber String? @unique // LeetCode's questionFrontendId (e.g. "1", "2", etc.)
     title          String
     titleSlug      String  @unique
     difficulty     String?
