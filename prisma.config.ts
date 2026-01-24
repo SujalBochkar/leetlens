@@ -10,6 +10,6 @@ export default defineConfig({
 		seed: 'prisma/seed.ts',
 	},
 	datasource: {
-		url: env('DATABASE_URL'),
+		url: env('DIRECT_URL'), // Use direct connection for migrations (port 5432)
 	},
 });
