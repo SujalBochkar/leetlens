@@ -2,21 +2,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from '@/lib/auth-client';
 import { BiUser, BiLogOut } from 'react-icons/bi';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const UserMenu = () => {
 	const [isOpen, setIsOpen] = useState(false);
-
-	// Mock session for now - in real app use useSession()
-	const session = {
-		user: {
-			image: '',
-			name: 'John Doe',
-		},
-	};
-	const isLoggedIn = true; // Mock
+	const { data: session } = useSession();
+	const isLoggedIn = !!session?.user;
 
 	if (!isLoggedIn) {
 		return (
