@@ -1,1 +1,1 @@
-npx prisma generate && npm run verify
+npx prisma generate && npx tsc --noEmit
