@@ -2,165 +2,182 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client"
-  output   = "./generated/prisma"
+    provider = "prisma-client"
+    output   = "./generated/prisma"
 }
+
 datasource db {
-  provider = "postgresql"
+    provider = "postgresql"
 }
 
 model Problem {
-  id             String  @id @default(cuid())
-  title          String
-  titleSlug      String  @unique
-  difficulty     String?
-  acceptanceRate Float?
+    id             String  @id @default(cuid())
+    title          String
+    titleSlug      String  @unique
+    difficulty     String?
+    acceptanceRate Float?
 
-  // LeetCode flags
-  hasSolution      Boolean @default(false)
-  hasVideoSolution Boolean @default(false)
-  isPaidOnly       Boolean @default(false)
-  status           String?
+    // LeetCode flags
+    hasSolution      Boolean @default(false)
+    hasVideoSolution Boolean @default(false)
+    isPaidOnly       Boolean @default(false)
+    status           String?
 
-  // Topics
-  topics Topic[]
+    // Topics
+    topics Topic[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  // Relations
-  companyStats          CompanyProblem[]
-  userProblemProgresses UserProblemProgress[]
+    // Relations
+    companyStats          CompanyProblem[]
+    userProblemProgresses UserProblemProgress[]
 }
 
 model Topic {
-  id        String    @id @default(cuid())
-  name      String    @unique
-  slug      String    @unique
-  // Relation back to problems
-  problems  Problem[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+    id        String    @id @default(cuid())
+    name      String    @unique
+    slug      String    @unique
+    // Relation back to problems
+    problems  Problem[]
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
 }
 
 model Company {
-  id      String  @id @default(cuid())
-  name    String  @unique
-  slug    String  @unique
-  logoUrl String?
+    id      String  @id @default(cuid())
+    name    String  @unique
+    slug    String  @unique
+    logoUrl String?
 
-  problems CompanyProblem[]
+    problems CompanyProblem[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model CompanyProblem {
-  id String @id @default(cuid())
+    id String @id @default(cuid())
 
-  company   Company @relation(fields: [companyId], references: [id])
-  companyId String
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String
 
-  problem   Problem @relation(fields: [problemId], references: [id])
-  problemId String
+    problem   Problem @relation(fields: [problemId], references: [id])
+    problemId String
 
-  // Company-specific metrics
-  priorityScore    Float
-  frequency30Days  Int   @default(0)
-  frequency3Months Int   @default(0)
-  frequency6Months Int   @default(0)
-  frequencyAllTime Int   @default(0)
+    // Company-specific metrics
+    priorityScore    Float
+    frequency30Days  Int   @default(0)
+    frequency3Months Int   @default(0)
+    frequency6Months Int   @default(0)
+    frequencyAllTime Int   @default(0)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  @@unique([companyId, problemId])
-  @@index([companyId, priorityScore(sort: Desc)])
+    @@unique([companyId, problemId])
+    @@index([companyId, priorityScore(sort: Desc)])
 }
 
-// ==================== USER & AUTH ====================
+// ==================== USER & AUTH (Better Auth) ====================
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
+    id            String  @id
+    name          String
+    email         String  @unique
+    emailVerified Boolean @default(false)
+    image         String?
 
-  accounts Account[]
-  sessions Session[]
+    accounts Account[]
+    sessions Session[]
 
-  // User's Learning Data
-  problemProgress UserProblemProgress[]
-  lists           UserList[]
+    // User's Learning Data
+    problemProgress UserProblemProgress[]
+    lists           UserList[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
+    id                    String    @id
+    userId                String
+    accountId             String
+    providerId            String
+    accessToken           String?
+    refreshToken          String?
+    accessTokenExpiresAt  DateTime?
+    refreshTokenExpiresAt DateTime?
+    scope                 String?
+    idToken               String?
+    password              String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id        String   @id
+    userId    String
+    token     String   @unique
+    expiresAt DateTime
+    ipAddress String?
+    userAgent String?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Verification {
+    id         String   @id
+    identifier String
+    value      String
+    expiresAt  DateTime
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 // ==================== USER PROGRESS ====================
 
 model UserProblemProgress {
-  id String @id @default(cuid())
+    id String @id @default(cuid())
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
 
-  problem   Problem @relation(fields: [problemId], references: [id])
-  problemId String
+    problem   Problem @relation(fields: [problemId], references: [id])
+    problemId String
 
-  status     String  @default("TODO") // TODO, SOLVED, REVISING
-  notes      String?
-  difficulty String?
+    status     String  @default("TODO") // TODO, SOLVED, REVISING
+    notes      String?
+    difficulty String?
 
-  nextRevisionDate DateTime?
-  lastSolvedAt     DateTime?
+    nextRevisionDate DateTime?
+    lastSolvedAt     DateTime?
 
-  isFiber Boolean @default(false)
+    isFiber Boolean @default(false)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  @@unique([userId, problemId])
+    @@unique([userId, problemId])
 }
 
 model UserList {
-  id          String  @id @default(cuid())
-  title       String
-  description String?
+    id          String  @id @default(cuid())
+    title       String
+    description String?
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
 
-  problemIds String[]
+    problemIds String[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
