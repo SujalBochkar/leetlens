@@ -1,4 +1,4 @@
-import prisma from '../../../db';
+import prisma from '@/server/db';
 import type { MergedRow } from './types';
 
 /**
@@ -8,6 +8,7 @@ import type { MergedRow } from './types';
 /**
  * Save merged problem data to database
  */
+
 export async function saveMergedProblems(
 	problems: MergedRow[],
 	companyName: string,

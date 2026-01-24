@@ -98,14 +98,6 @@ type skillStats = {
 type Difficulty = 'All' | 'Easy' | 'Medium' | 'Hard';
 //User Details
 
-//  ProblemData
-export type ProblemSetQuestionListData = {
-	problemsetQuestionList: {
-		total: number;
-		questions: object[];
-	};
-};
-
 type Submission = {
 	title: string;
 	titleSlug: string;

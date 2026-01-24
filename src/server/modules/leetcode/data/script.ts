@@ -1,9 +1,9 @@
+import 'dotenv/config';
 import { parse } from 'csv-parse/sync';
-import { stringify } from 'csv-stringify/sync';
-import * as fs from 'fs';
 import * as path from 'path';
-import { fetchCSV, fetchFolderFiles } from './request';
+import { saveMergedProblems } from './database';
 import type { MergedRow, ProblemRow } from './types';
+import { getAllCompanyFolders, getCompanyData } from './request';
 
 // Weights for 5 windows
 const WEIGHTS: Record<string, number> = {
@@ -14,8 +14,6 @@ const WEIGHTS: Record<string, number> = {
 	All: 0.1,
 };
 
-const FOLDER_PATH = 'American%20Express';
-
 function parseCSV(content: string): ProblemRow[] {
 	return parse(content, {
 		columns: true,
@@ -24,74 +22,86 @@ function parseCSV(content: string): ProblemRow[] {
 }
 
 async function main() {
-	// 1) Get all CSV file paths
-	console.log(`fetching files from ${FOLDER_PATH}...`);
-	const files = await fetchFolderFiles(FOLDER_PATH);
-	console.log('Found CSVs:', files);
+	console.log('Fetching all company folders...');
+	const companies = await getAllCompanyFolders();
+	console.log(`Found ${companies.length} companies:`, companies);
 
-	// 2) Parse each CSV
-	const data: Record<string, Record<string, ProblemRow & { frequencyNum: number }>> = {};
+	for (const company of companies) {
+		console.log(`\nProcessing ${company}...`);
 
-	for (const filePath of files) {
-		const name = path.basename(filePath, '.csv');
-		const csvText = await fetchCSV(filePath);
-		const rows = parseCSV(csvText);
+		// 1) Fetch all CSV data for this company
+		const companyData = await getCompanyData(company);
+		const data: Record<string, Record<string, ProblemRow & { frequencyNum: number }>> = {};
 
-		for (const row of rows) {
-			const title = row.Title.trim();
-			const freqNum = parseFloat(String(row.Frequency));
+		// 2) Parse and aggregate data
+		for (const [filePath, csvText] of Object.entries(companyData)) {
+			const name = path.basename(filePath, '.csv'); // e.g., "30 Days"
+			const rows = parseCSV(csvText);
 
-			if (!data[title]) {
-				data[title] = {};
-			}
+			for (const row of rows) {
+				const title = row.Title.trim();
+				const freqNum = parseFloat(String(row.Frequency));
 
-			data[title][name] = {
-				...row,
-				frequencyNum: isNaN(freqNum) ? 0 : freqNum,
-			};
-		}
-	}
+				if (!data[title]) {
+					data[title] = {};
+				}
 
-	// 3) Merge into unified rows
-	const mergedRows: MergedRow[] = [];
-
-	for (const [title, windows] of Object.entries(data)) {
-		const base = Object.values(windows)[0]; // just to pull static fields
-		const difficulty = base.Difficulty;
-		// Some CSVs might use "Acceptance Rate" or "AcceptanceRate"
-		const acceptance = base.AcceptanceRate || (base as any).AcceptanceRate || '';
-		const link = base.Link;
-		const topics = base.Topics;
-
-		// Compute weighted priority
-		let priority = 0;
-		for (const [windowName, weight] of Object.entries(WEIGHTS)) {
-			if (windows[windowName]) {
-				priority += windows[windowName].frequencyNum * weight;
+				data[title][name] = {
+					...row,
+					frequencyNum: isNaN(freqNum) ? 0 : freqNum,
+				};
 			}
 		}
 
-		mergedRows.push({
-			Difficulty: difficulty,
-			Title: title,
-			AcceptanceRate: acceptance,
-			Link: link,
-			Topics: topics,
-			PriorityScore: priority.toFixed(2),
-			...Object.fromEntries(Object.entries(windows).map(([k, v]) => [k, v.frequencyNum])),
-		});
+		// 3) Merge into unified rows
+		const mergedRows: MergedRow[] = [];
+
+		for (const [title, windows] of Object.entries(data)) {
+			const base = Object.values(windows)[0]; // just to pull static fields
+
+			// Compute weighted priority
+			let priority = 0;
+			for (const [windowName, weight] of Object.entries(WEIGHTS)) {
+				// Match generic window names like "Thirty Days" to "30 Days" if needed,
+				// or assume CSV names match keys.
+				// The previous code assumed direct mapping.
+				// Let's rely on the CSV filenames being close enough or map them if needed.
+				// For now, we assume the CSV filenames (e.g. "1. Thirty Days") handled by `name` match logic?
+				// Actually, the previous code used `path.basename` which includes numbers "1. Thirty Days".
+				// We might need to map "1. Thirty Days" -> "30 Days".
+
+				// Let's stick to the simple check for now:
+				// If the window name *contains* the key
+				const matchingWindowKey = Object.keys(windows).find((k) =>
+					k.toLowerCase().includes(windowName.toLowerCase().replace(' ', '')),
+				);
+
+				if (matchingWindowKey && windows[matchingWindowKey]) {
+					priority += windows[matchingWindowKey].frequencyNum * weight;
+				}
+			}
+
+			mergedRows.push({
+				Difficulty: base.Difficulty,
+				Title: title,
+				AcceptanceRate: base.AcceptanceRate || (base as any).AcceptanceRate || '',
+				Link: base.Link,
+				Topics: base.Topics,
+				PriorityScore: priority.toFixed(2),
+				...Object.fromEntries(Object.entries(windows).map(([k, v]) => [k, v.frequencyNum])),
+			});
+		}
+
+		// 4) Sort by priority DESC
+		mergedRows.sort((a, b) => parseFloat(b.PriorityScore) - parseFloat(a.PriorityScore));
+
+		// 5) Save to Database
+		if (mergedRows.length > 0) {
+			await saveMergedProblems(mergedRows, decodeURIComponent(company));
+		} else {
+			console.log(`No data found for ${company}`);
+		}
 	}
-
-	// 4) Sort by priority DESC
-	mergedRows.sort((a, b) => parseFloat(b.PriorityScore) - parseFloat(a.PriorityScore));
-
-	// 5) Output to CSV
-	const csv = stringify(mergedRows, {
-		header: true,
-	});
-
-	fs.writeFileSync('american_express_merged.csv', csv);
-	console.log('Merged CSV written ➤ american_express_merged.csv');
 }
 
 main().catch(console.error);

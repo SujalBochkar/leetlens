@@ -19,7 +19,7 @@
 /tmp
 .temp
 .tmp
-src/server/prisma/generated
+prisma/generated
 
 # Logs
 logs

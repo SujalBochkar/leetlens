@@ -1,0 +1,166 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+datasource db {
+  provider = "postgresql"
+}
+
+model Problem {
+  id             String  @id @default(cuid())
+  title          String
+  titleSlug      String  @unique
+  difficulty     String?
+  acceptanceRate Float?
+
+  // LeetCode flags
+  hasSolution      Boolean @default(false)
+  hasVideoSolution Boolean @default(false)
+  isPaidOnly       Boolean @default(false)
+  status           String?
+
+  // Topics
+  topics Topic[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  companyStats          CompanyProblem[]
+  userProblemProgresses UserProblemProgress[]
+}
+
+model Topic {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
+  // Relation back to problems
+  problems  Problem[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Company {
+  id      String  @id @default(cuid())
+  name    String  @unique
+  slug    String  @unique
+  logoUrl String?
+
+  problems CompanyProblem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CompanyProblem {
+  id String @id @default(cuid())
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String
+
+  problem   Problem @relation(fields: [problemId], references: [id])
+  problemId String
+
+  // Company-specific metrics
+  priorityScore    Float
+  frequency30Days  Int   @default(0)
+  frequency3Months Int   @default(0)
+  frequency6Months Int   @default(0)
+  frequencyAllTime Int   @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([companyId, problemId])
+  @@index([companyId, priorityScore(sort: Desc)])
+}
+
+// ==================== USER & AUTH ====================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+
+  accounts Account[]
+  sessions Session[]
+
+  // User's Learning Data
+  problemProgress UserProblemProgress[]
+  lists           UserList[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ==================== USER PROGRESS ====================
+
+model UserProblemProgress {
+  id String @id @default(cuid())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  problem   Problem @relation(fields: [problemId], references: [id])
+  problemId String
+
+  status     String  @default("TODO") // TODO, SOLVED, REVISING
+  notes      String?
+  difficulty String?
+
+  nextRevisionDate DateTime?
+  lastSolvedAt     DateTime?
+
+  isFiber Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, problemId])
+}
+
+model UserList {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  problemIds String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
