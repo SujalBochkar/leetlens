@@ -35,15 +35,16 @@ export async function saveMergedProblems(
 			where: { titleSlug },
 			update: {
 				// Optionally update acceptance/difficulty if we trust this source
-				acceptanceRate: p.AcceptanceRate,
+				acceptanceRate: parseFloat(p.AcceptanceRate) || null,
 				// Don't overwrite title if it exists, as master might be cleaner
 			},
 			create: {
 				title: p.Title,
 				titleSlug,
 				difficulty: p.Difficulty, // "Easy", "Medium", "Hard"
-				acceptanceRate: p.AcceptanceRate,
-				topics: p.Topics ? p.Topics.split(';').map((t) => t.trim()) : [],
+				acceptanceRate: parseFloat(p.AcceptanceRate) || null,
+				// Topics are connected via relation, not stored as string array
+				// The topics should already exist in the Topic table
 			},
 		});
 
