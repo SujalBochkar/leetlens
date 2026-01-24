@@ -7,8 +7,8 @@
 		"build": "prisma generate && next build",
 		"start": "next start",
 		"type-check": "tsc --noEmit",
-		"lint": "eslint . --ext .ts,.tsx",
-		"lint:fix": "eslint . --ext .ts,.tsx --fix",
+		"lint": "oxlint src",
+		"lint:fix": "oxlint src --fix",
 		"format": "prettier --write . && npm run prisma:format",
 		"format:check": "prettier --check .",
 		"prisma:format": "prisma format --schema=src/prisma/schema.prisma",
@@ -46,10 +46,7 @@
 		"@types/react": "19.2.9",
 		"@types/react-dom": "19.2.3",
 		"babel-plugin-react-compiler": "1.0.0",
-		"eslint": "^9",
-		"eslint-config-next": "16.1.4",
-		"eslint-config-prettier": "^10.1.8",
-		"eslint-plugin-prettier": "^5.5.4",
+		"oxlint": "^1.0.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.2.7",
 		"prettier": "^3.7.4",
@@ -60,9 +57,12 @@
 		"typescript": "^5"
 	},
 	"lint-staged": {
-		"src/**/*.{js,jsx,ts,tsx,json}": [
-			"prettier --write",
-			"eslint --ext .ts,.tsx --fix"
+		"src/**/*.{js,jsx,ts,tsx}": [
+			"oxlint --fix",
+			"prettier --write"
+		],
+		"src/**/*.json": [
+			"prettier --write"
 		]
 	},
 	"overrides": {
