@@ -1,0 +1,43 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"ignorePatterns": [
+		"node_modules/",
+		"static/",
+		"dist/",
+		"build/",
+		".next/",
+		"out/",
+		"next-env.d.ts",
+		"*.log",
+		"npm-debug.log*",
+		".DS_Store",
+		"*/.DS_Store",
+		"coverage/"
+	],
+	"plugins": ["typescript", "react", "react", "nextjs"],
+	"env": {
+		"builtin": true,
+		"browser": true,
+		"node": true
+	},
+	"globals": {
+		"console": "readonly",
+		"process": "readonly",
+		"__dirname": "readonly",
+		"__filename": "readonly",
+		"module": "readonly",
+		"require": "readonly",
+		"exports": "readonly",
+		"Buffer": "readonly",
+		"React": "readonly",
+		"JSX": "readonly"
+	},
+	"rules": {
+		"no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+		"@typescript-eslint/no-explicit-any": "off",
+		"no-console": "off"
+	},
+	"categories": {
+		"correctness": "warn"
+	}
+}

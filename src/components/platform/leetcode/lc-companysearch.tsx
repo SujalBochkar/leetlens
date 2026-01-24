@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { SearchIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Company {
@@ -141,16 +142,16 @@ export default function LcCompanySearch() {
 
 			<div className="space-y-2">
 				{filteredCompanies.map((company) => (
-					<a
+					<Link
 						key={company.slug}
-						href={`leetcode/${company.slug}`}
+						href={`/platform/leetcode/${company.slug}`}
 						className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-zinc-900 transition-colors"
 					>
 						<span className="text-sm text-zinc-300 font-medium">{company.name}</span>
 						<span className="text-xs px-2 py-0.5 rounded-full bg-zinc-800/50 text-orange-400/90">
 							{company.problemCount}
 						</span>
-					</a>
+					</Link>
 				))}
 			</div>
 
