@@ -4,18 +4,23 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 
 const prismaClientSingleton = () => {
-	// 1. Create a standard pg Pool with SSL (required for Supabase)
+	// Create a pg Pool with connection limits for Supabase
 	const pool = new pg.Pool({
 		connectionString: process.env.DATABASE_URL,
 		ssl: {
-			rejectUnauthorized: false, // Allows connection to Supabase without local cert validation
+			rejectUnauthorized: false,
 		},
+		max: 5,
+		idleTimeoutMillis: 30000,
+		connectionTimeoutMillis: 10000,
 	});
 
-	// 2. Wrap it in the Prisma Driver Adapter
-	const adapter = new PrismaPg(pool);
+	// Handle pool errors gracefully
+	pool.on('error', (err) => {
+		console.error('Unexpected pool error:', err);
+	});
 
-	// 3. Initialize Prisma with the adapter
+	const adapter = new PrismaPg(pool);
 	return new PrismaClient({ adapter });
 };
 
