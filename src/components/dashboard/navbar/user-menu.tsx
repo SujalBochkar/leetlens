@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { signOut, useSession } from '@/lib/auth-client';
+import { signOut, useSession } from 'next-auth/react';
 import { BiUser, BiLogOut } from 'react-icons/bi';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -13,7 +13,7 @@ export const UserMenu = () => {
 
 	if (!isLoggedIn) {
 		return (
-			<Link href="/signup">
+			<Link href="/login">
 				<button className="bg-primary whitespace-nowrap text-primary-foreground px-5 py-2 rounded-lg font-medium inline-flex items-center justify-center tracking-tight hover:opacity-90 transition-opacity">
 					Signup for free
 				</button>

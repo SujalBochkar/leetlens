@@ -1,22 +1,13 @@
-import { betterAuth } from 'better-auth';
-import { prismaAdapter } from 'better-auth/adapters/prisma';
+import NextAuth from 'next-auth';
+import { PrismaAdapter } from '@auth/prisma-adapter';
 import prisma from '@/server/db';
+import { authConfig } from './auth.config';
 
-export const auth = betterAuth({
-	database: prismaAdapter(prisma, {
-		provider: 'postgresql',
-	}),
-	emailAndPassword: {
-		enabled: true,
-	},
-	socialProviders: {
-		github: {
-			clientId: process.env.GITHUB_CLIENT_ID as string,
-			clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-		},
-		google: {
-			clientId: process.env.GOOGLE_CLIENT_ID as string,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-		},
-	},
+/**
+ * Full auth config with Prisma adapter
+ * Used by API routes (not edge-compatible)
+ */
+export const { handlers, auth, signIn, signOut } = NextAuth({
+	...authConfig,
+	adapter: PrismaAdapter(prisma),
 });
