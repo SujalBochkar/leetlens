@@ -27,12 +27,12 @@ function AuthErrorContent() {
 	const errorMessage = errorMessages[error] || errorMessages.Default;
 
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
-			<div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-lg dark:bg-gray-800">
+		<div className="flex min-h-screen items-center justify-center bg-surface-page">
+			<div className="w-full max-w-md space-y-8 rounded-lg bg-surface-secondary p-8 shadow-lg border border-border-primary">
 				<div className="text-center">
-					<div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20">
+					<div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-status-error/10">
 						<svg
-							className="h-6 w-6 text-red-600 dark:text-red-400"
+							className="h-6 w-6 text-status-error"
 							fill="none"
 							viewBox="0 0 24 24"
 							strokeWidth="1.5"
@@ -45,23 +45,21 @@ function AuthErrorContent() {
 							/>
 						</svg>
 					</div>
-					<h1 className="text-2xl font-bold text-gray-900 dark:text-white">Authentication Error</h1>
-					<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{errorMessage}</p>
-					{error && (
-						<p className="mt-1 text-xs text-gray-400 dark:text-gray-500">Error code: {error}</p>
-					)}
+					<h1 className="text-2xl font-bold text-text-primary">Authentication Error</h1>
+					<p className="mt-2 text-sm text-text-secondary">{errorMessage}</p>
+					{error && <p className="mt-1 text-xs text-text-tertiary">Error code: {error}</p>}
 				</div>
 
 				<div className="space-y-4">
 					<Link
 						href="/login"
-						className="flex w-full justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+						className="flex w-full justify-center rounded-md bg-brand-primary px-4 py-2 text-sm font-semibold text-text-inverse shadow-sm hover:bg-brand-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
 					>
 						Try again
 					</Link>
 					<Link
 						href="/"
-						className="flex w-full justify-center rounded-md bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+						className="flex w-full justify-center rounded-md bg-surface-tertiary px-4 py-2 text-sm font-semibold text-text-primary shadow-sm hover:bg-surface-hover border border-border-primary"
 					>
 						Go to homepage
 					</Link>
@@ -75,8 +73,8 @@ export default function AuthErrorPage() {
 	return (
 		<Suspense
 			fallback={
-				<div className="flex min-h-screen items-center justify-center">
-					<div className="text-gray-500">Loading...</div>
+				<div className="flex min-h-screen items-center justify-center bg-surface-page">
+					<div className="text-text-tertiary">Loading...</div>
 				</div>
 			}
 		>

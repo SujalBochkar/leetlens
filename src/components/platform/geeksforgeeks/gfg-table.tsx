@@ -96,7 +96,7 @@ export default function GfgTable() {
 
 	return (
 		<div className="max-w-[100rem] mx-auto">
-			<div className="rounded-xl border border-zinc-800 bg-zinc-950">
+			<div className="rounded-xl border border-border-primary bg-surface-page">
 				<div className="relative w-full overflow-auto">
 					<table className="w-full caption-bottom text-sm">
 						<GfgTableHeader sortConfig={sortConfig} onSort={requestSort} />

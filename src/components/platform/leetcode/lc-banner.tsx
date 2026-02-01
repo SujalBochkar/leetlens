@@ -1,73 +1,169 @@
+'use client';
+
 import { cn } from '@/lib/utils';
+import { Zap } from 'lucide-react';
+import { memo, useMemo } from 'react';
+import { useLeetCodeStats } from '@/hooks/use-leetcode';
 
 interface LCBannerProps {
 	className?: string;
 }
 
-export default function LCBanner({ className }: LCBannerProps) {
-	const stats = {
-		totalQuestions: 2834,
-		easy: 742,
-		medium: 1473,
-		hard: 619,
-		companies: 75,
-	};
+// Memoized banner component - only re-renders when props change
+const LCBanner = memo(function LCBanner({ className }: LCBannerProps) {
+	// Fetch stats with caching (5 min stale time, 30 min cache)
+	const { data, isLoading } = useLeetCodeStats();
+
+	// Fallback stats while loading or if no data
+	const stats = useMemo(
+		() => ({
+			totalQuestions: data?.data?.totalProblems ?? 2834,
+			easy: data?.data?.easy ?? 742,
+			medium: data?.data?.medium ?? 1473,
+			hard: data?.data?.hard ?? 619,
+			companies: data?.data?.companyCount ?? 75,
+		}),
+		[data],
+	);
 
 	return (
 		<div
 			className={cn(
-				'w-full rounded-xl overflow-hidden bg-[#0a0f22] border border-gray-800 shadow-2xl',
+				'w-full rounded-2xl overflow-hidden bg-surface-secondary border border-border-primary',
 				className,
 			)}
 		>
-			<div className="flex items-center justify-between p-8 h-52">
-				{/* Left Section */}
-				<div className="flex items-center gap-6 text-white">
-					<div className="relative flex items-center justify-center">
-						<div className="absolute w-16 h-16 bg-cyan-500/20 rounded-full blur-xl"></div>
-						<div className="relative z-10 p-3 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl shadow-lg">
-							<svg viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 text-white">
-								<path d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.645 1.837-.645s1.357.195 1.823.662l2.697 2.606c.514.515 1.365.497 1.9-.038.535-.536.553-1.387.039-1.901l-2.609-2.636a5.055 5.055 0 0 0-2.445-1.337l2.467-2.503c.516-.514.498-1.366-.037-1.901-.535-.535-1.387-.552-1.901-.038l-10.1 10.101c-.981.982-1.494 2.337-1.494 3.835 0 1.498.513 2.895 1.494 3.875l4.347 4.361c.981.981 2.337 1.494 3.834 1.494 1.498 0 2.853-.513 3.835-1.494l2.609-2.637c.514-.514.496-1.365-.039-1.9s-1.386-.553-1.899-.039zM20.811 13.01H10.666c-.702 0-1.27.604-1.27 1.346s.568 1.346 1.27 1.346h10.145c.701 0 1.27-.604 1.27-1.346s-.569-1.346-1.27-1.346z" />
-							</svg>
-						</div>
+			<div className="p-6">
+				{/* Header */}
+				<div className="flex items-center gap-2 mb-6">
+					<div className="flex items-center gap-2 px-3 py-1.5 bg-brand-primary/10 rounded-full border border-brand-primary/20">
+						<Zap className="w-4 h-4 text-brand-primary" />
+						<span className="text-sm font-medium text-brand-primary">LeetCode Problems</span>
 					</div>
-					<div className="flex flex-col gap-2">
-						<span className="text-sm font-medium text-cyan-400 uppercase tracking-wider">
-							Coding Challenge Platform
-						</span>
-						<h1 className="text-3xl font-bold text-gray-100">LeetCode Premium</h1>
-						<button className="mt-2 px-6 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-semibold transition-all duration-200 hover:shadow-cyan-glow">
-							Start Practice Session
-						</button>
-					</div>
+					{isLoading && (
+						<span className="text-xs text-text-tertiary animate-pulse">Loading...</span>
+					)}
 				</div>
 
-				{/* Stats Section */}
-				<div className="flex gap-10 pr-6 backdrop-blur-sm bg-white/5 rounded-xl p-6 border border-gray-800">
-					<StatItem value={stats.totalQuestions} label="Total" />
-					<StatItem value={stats.easy} label="Easy" color="text-green-400" />
-					<StatItem value={stats.medium} label="Medium" color="text-amber-400" />
-					<StatItem value={stats.hard} label="Hard" color="text-red-400" />
-					<StatItem value={stats.companies} label="Companies" color="text-purple-400" />
+				{/* Stats with Vertical Bars */}
+				<div className="flex items-end gap-8">
+					{/* Total */}
+					<div className="flex flex-col items-center">
+						<p className="text-3xl font-bold text-text-primary mb-1">
+							{stats.totalQuestions.toLocaleString()}
+						</p>
+						<p className="text-xs text-text-tertiary uppercase tracking-wider">Total</p>
+					</div>
+
+					{/* Divider */}
+					<div className="h-20 w-px bg-border-primary" />
+
+					{/* Difficulty Bars */}
+					<div className="flex items-end gap-4 flex-1">
+						<DifficultyBar
+							label="Easy"
+							value={stats.easy}
+							percentage={(stats.easy / stats.totalQuestions) * 100}
+							color="emerald"
+						/>
+						<DifficultyBar
+							label="Medium"
+							value={stats.medium}
+							percentage={(stats.medium / stats.totalQuestions) * 100}
+							color="amber"
+						/>
+						<DifficultyBar
+							label="Hard"
+							value={stats.hard}
+							percentage={(stats.hard / stats.totalQuestions) * 100}
+							color="rose"
+						/>
+					</div>
+
+					{/* Divider */}
+					<div className="h-20 w-px bg-border-primary" />
+
+					{/* Companies */}
+					<div className="flex flex-col items-center">
+						<p className="text-3xl font-bold text-brand-secondary mb-1">{stats.companies}+</p>
+						<p className="text-xs text-text-tertiary uppercase tracking-wider">Companies</p>
+					</div>
 				</div>
 			</div>
 		</div>
 	);
-}
+});
 
-interface StatItemProps {
-	value: number;
+LCBanner.displayName = 'LCBanner';
+
+export default LCBanner;
+
+interface DifficultyBarProps {
 	label: string;
-	color?: string;
+	value: number;
+	percentage: number;
+	color: 'emerald' | 'amber' | 'rose';
 }
 
-function StatItem({ value, label, color = 'text-gray-100' }: StatItemProps) {
+// Memoized difficulty bar - prevents unnecessary re-renders
+const DifficultyBar = memo(function DifficultyBar({
+	label,
+	value,
+	percentage,
+	color,
+}: DifficultyBarProps) {
+	const maxHeight = 80;
+
+	// useMemo for expensive calculations
+	const barHeight = useMemo(
+		() => Math.max((percentage / 60) * maxHeight, 20),
+		[percentage, maxHeight],
+	);
+
+	// useMemo for color config lookup
+	const config = useMemo(() => {
+		const colorConfig = {
+			emerald: {
+				bar: 'bg-emerald-500',
+				text: 'text-emerald-500',
+				bg: 'bg-emerald-500/10',
+				border: 'border-emerald-500/30',
+			},
+			amber: {
+				bar: 'bg-amber-500',
+				text: 'text-amber-500',
+				bg: 'bg-amber-500/10',
+				border: 'border-amber-500/30',
+			},
+			rose: {
+				bar: 'bg-rose-500',
+				text: 'text-rose-500',
+				bg: 'bg-rose-500/10',
+				border: 'border-rose-500/30',
+			},
+		};
+		return colorConfig[color];
+	}, [color]);
+
 	return (
-		<div className="flex flex-col items-center px-4">
-			<span className={`text-2xl font-bold ${color}`}>{value}</span>
-			<span className="text-sm font-medium text-gray-400 uppercase tracking-wider mt-1">
-				{label}
-			</span>
+		<div className="flex flex-col items-center gap-2 flex-1">
+			{/* Bar Container */}
+			<div
+				className={`w-full max-w-16 rounded-lg ${config.bg} border ${config.border} flex flex-col justify-end p-1.5`}
+				style={{ height: maxHeight }}
+			>
+				<div
+					className={`w-full rounded-md ${config.bar} transition-all duration-500`}
+					style={{ height: barHeight }}
+				/>
+			</div>
+			{/* Label */}
+			<div className="text-center">
+				<p className={`text-lg font-bold ${config.text}`}>{value}</p>
+				<p className="text-xs text-text-tertiary uppercase tracking-wider">{label}</p>
+			</div>
 		</div>
 	);
-}
+});
+
+DifficultyBar.displayName = 'DifficultyBar';

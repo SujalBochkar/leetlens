@@ -348,7 +348,7 @@ export default function LcCompanyQuestions() {
 								{timePeriod} <ChevronDown className="ml-1 h-3 w-3" />
 							</Button>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end" className="bg-popover bg-black">
+						<DropdownMenuContent align="end" className="bg-popover">
 							<DropdownMenuItem onClick={() => setTimePeriod('last 6 months')}>
 								last 6 months
 							</DropdownMenuItem>
@@ -364,12 +364,12 @@ export default function LcCompanyQuestions() {
 				</div>
 			</div>
 
-			<div className="rounded-lg border border-gray-200 dark:border-white/30 overflow-hidden">
+			<div className="rounded-lg border border-border-primary overflow-hidden">
 				<table className="w-full">
-					<thead className="bg-muted">
-						<tr className="border-b border-gray-200 dark:border-white/30">
+					<thead className="bg-surface-secondary">
+						<tr className="border-b border-border-primary">
 							<th
-								className="p-4 text-left font-medium text-muted-foreground cursor-pointer hover:text-foreground dark:text-gray-400"
+								className="p-4 text-left font-medium text-text-tertiary cursor-pointer hover:text-text-primary"
 								onClick={() => requestSort('isSolved')}
 							>
 								<div className="flex items-center gap-1">
@@ -378,13 +378,13 @@ export default function LcCompanyQuestions() {
 								</div>
 							</th>
 							<th
-								className="p-4 text-left font-medium text-muted-foreground cursor-pointer hover:text-foreground dark:text-gray-400"
+								className="p-4 text-left font-medium text-text-tertiary cursor-pointer hover:text-text-primary"
 								onClick={() => requestSort('id')}
 							>
 								<div className="flex items-center gap-1">#{getSortIcon('id')}</div>
 							</th>
 							<th
-								className="p-4 text-left font-medium text-muted-foreground cursor-pointer hover:text-foreground dark:text-gray-400"
+								className="p-4 text-left font-medium text-text-tertiary cursor-pointer hover:text-text-primary"
 								onClick={() => requestSort('title')}
 							>
 								<div className="flex items-center gap-1">
@@ -393,7 +393,7 @@ export default function LcCompanyQuestions() {
 								</div>
 							</th>
 							<th
-								className="p-4 text-left font-medium text-muted-foreground cursor-pointer hover:text-foreground dark:text-gray-400"
+								className="p-4 text-left font-medium text-text-tertiary cursor-pointer hover:text-text-primary"
 								onClick={() => requestSort('category')}
 							>
 								<div className="flex items-center gap-1">
@@ -402,7 +402,7 @@ export default function LcCompanyQuestions() {
 								</div>
 							</th>
 							<th
-								className="p-4 text-left font-medium text-muted-foreground cursor-pointer hover:text-foreground dark:text-gray-400"
+								className="p-4 text-left font-medium text-text-tertiary cursor-pointer hover:text-text-primary"
 								onClick={() => requestSort('difficulty')}
 							>
 								<div className="flex items-center gap-1">
@@ -411,7 +411,7 @@ export default function LcCompanyQuestions() {
 								</div>
 							</th>
 							<th
-								className="p-4 text-left font-medium text-muted-foreground cursor-pointer hover:text-foreground dark:text-gray-400"
+								className="p-4 text-left font-medium text-text-tertiary cursor-pointer hover:text-text-primary"
 								onClick={() => requestSort('frequency')}
 							>
 								<div className="flex items-center gap-1">
@@ -420,7 +420,7 @@ export default function LcCompanyQuestions() {
 								</div>
 							</th>
 							<th
-								className="p-4 text-left font-medium text-muted-foreground cursor-pointer hover:text-foreground dark:text-gray-400"
+								className="p-4 text-left font-medium text-text-tertiary cursor-pointer hover:text-text-primary"
 								onClick={() => requestSort('hints')}
 							>
 								<div className="flex items-center gap-1">
@@ -428,16 +428,14 @@ export default function LcCompanyQuestions() {
 									{getSortIcon('hints')}
 								</div>
 							</th>
-							<th className="p-4 text-left font-medium text-muted-foreground dark:text-gray-400">
-								AI Help
-							</th>
+							<th className="p-4 text-left font-medium text-text-tertiary">AI Help</th>
 						</tr>
 					</thead>
 					<tbody>
 						{getSortedQuestions().map((question) => (
 							<tr
 								key={question.id}
-								className="border-b border-gray-200 dark:border-white/30 hover:bg-muted/50 transition-colors"
+								className="border-b border-border-primary hover:bg-surface-hover transition-colors"
 							>
 								<td className="p-4">
 									<input
@@ -455,17 +453,17 @@ export default function LcCompanyQuestions() {
 										className={`inline-flex items-center gap-1.5 before:w-1.5 before:h-1.5 before:rounded-full px-2.5 py-1 rounded-full text-xs font-medium
                     ${
 											question.difficulty === 'Easy'
-												? 'text-green-500 border border-green-500/20 bg-green-500/10 before:bg-green-500'
+												? 'text-difficulty-easy border border-difficulty-easy-border bg-difficulty-easy-bg before:bg-difficulty-easy'
 												: question.difficulty === 'Medium'
-													? 'text-yellow-500 border border-yellow-500/20 bg-yellow-500/10 before:bg-yellow-500'
-													: 'text-red-500 border border-red-500/20 bg-red-500/10 before:bg-red-500'
+													? 'text-difficulty-medium border border-difficulty-medium-border bg-difficulty-medium-bg before:bg-difficulty-medium'
+													: 'text-difficulty-hard border border-difficulty-hard-border bg-difficulty-hard-bg before:bg-difficulty-hard'
 										}`}
 									>
 										{question.difficulty}
 									</span>
 								</td>
 								<td className="p-4">
-									<span className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/20 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300">
+									<span className="inline-flex items-center rounded-full bg-status-info/10 px-2 py-1 text-xs font-medium text-status-info">
 										{question.frequency}%
 									</span>
 								</td>
@@ -476,8 +474,8 @@ export default function LcCompanyQuestions() {
 									<span
 										className={`px-2.5 py-1 rounded-full text-xs font-medium inline-flex items-center justify-center ${
 											question.hasAISolution
-												? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300'
-												: 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+												? 'bg-status-success/10 text-status-success'
+												: 'bg-surface-tertiary text-text-disabled'
 										}`}
 									>
 										{question.hasAISolution ? <Bot className="h-3.5 w-3.5" /> : 'N/A'}

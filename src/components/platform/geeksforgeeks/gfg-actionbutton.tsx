@@ -13,7 +13,7 @@ export default function GfgActionButton({ Icon, onClick }: ActionButtonProps) {
 		<Button
 			variant="ghost"
 			size="icon"
-			className="h-8 w-8 text-zinc-400 hover:text-zinc-100"
+			className="h-8 w-8 text-text-tertiary hover:text-text-primary"
 			onClick={onClick}
 		>
 			<Icon className="h-4 w-4" />

@@ -1,0 +1,10 @@
+/**
+ * Global Styles
+ *
+ * This is the main entry point for all CSS.
+ * It imports the theme system and adds any additional global styles.
+ */
+
+@import './theme.css';
+
+/* Move globals.css to src/styles for organization, but keep this as main entry */
