@@ -1,46 +1,140 @@
+/**
+ * Global Styles - LeetLens
+ *
+ * PRODUCTION COLOR SYSTEM
+ * =======================
+ * All colors are defined as CSS custom properties with semantic naming.
+ *
+ * COLOR CATEGORIES:
+ * - brand-*     : Brand identity colors (primary, accent)
+ * - surface-*   : Background colors (page, cards, hover states)
+ * - text-*      : Text/foreground colors
+ * - border-*    : Border and divider colors
+ * - difficulty-*: Easy/Medium/Hard colors (domain-specific)
+ * - status-*    : Success/Warning/Error/Info colors
+ * - chart-*     : Data visualization colors
+ *
+ * USAGE:
+ * - Tailwind: bg-surface-primary, text-text-secondary, border-border-primary
+ * - CSS: var(--surface-primary), var(--text-secondary)
+ * - JS/TS: Import from '@/styles/colors'
+ *
+ * THEME SWITCHING:
+ * Add/remove 'dark' class on <html> element to switch themes.
+ */
+
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================================================
+   TAILWIND THEME CONFIGURATION
+   ============================================================================ */
+
 @theme inline {
-	--color-background: var(--background);
-	--color-foreground: var(--foreground);
+	/* Font families */
 	--font-sans: var(--font-geist-sans);
 	--font-mono: var(--font-geist-mono);
-	--color-sidebar-ring: var(--sidebar-ring);
-	--color-sidebar-border: var(--sidebar-border);
-	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-	--color-sidebar-accent: var(--sidebar-accent);
-	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-	--color-sidebar-primary: var(--sidebar-primary);
-	--color-sidebar-foreground: var(--sidebar-foreground);
-	--color-sidebar: var(--sidebar);
-	--color-chart-5: var(--chart-5);
-	--color-chart-4: var(--chart-4);
-	--color-chart-3: var(--chart-3);
-	--color-chart-2: var(--chart-2);
+
+	/* Brand colors */
+	--color-brand-primary: var(--brand-primary);
+	--color-brand-primary-hover: var(--brand-primary-hover);
+	--color-brand-primary-muted: var(--brand-primary-muted);
+	--color-brand-secondary: var(--brand-secondary);
+	--color-brand-accent: var(--brand-accent);
+	--color-brand-accent-hover: var(--brand-accent-hover);
+
+	/* Surface colors (backgrounds) */
+	--color-surface-page: var(--surface-page);
+	--color-surface-primary: var(--surface-primary);
+	--color-surface-secondary: var(--surface-secondary);
+	--color-surface-tertiary: var(--surface-tertiary);
+	--color-surface-hover: var(--surface-hover);
+	--color-surface-active: var(--surface-active);
+	--color-surface-selected: var(--surface-selected);
+	--color-surface-overlay: var(--surface-overlay);
+
+	/* Text colors */
+	--color-text-primary: var(--text-primary);
+	--color-text-secondary: var(--text-secondary);
+	--color-text-tertiary: var(--text-tertiary);
+	--color-text-disabled: var(--text-disabled);
+	--color-text-inverse: var(--text-inverse);
+	--color-text-link: var(--text-link);
+	--color-text-link-hover: var(--text-link-hover);
+
+	/* Border colors */
+	--color-border-primary: var(--border-primary);
+	--color-border-secondary: var(--border-secondary);
+	--color-border-focus: var(--border-focus);
+	--color-border-error: var(--border-error);
+
+	/* Difficulty colors */
+	--color-difficulty-easy: var(--difficulty-easy);
+	--color-difficulty-easy-bg: var(--difficulty-easy-bg);
+	--color-difficulty-easy-border: var(--difficulty-easy-border);
+	--color-difficulty-medium: var(--difficulty-medium);
+	--color-difficulty-medium-bg: var(--difficulty-medium-bg);
+	--color-difficulty-medium-border: var(--difficulty-medium-border);
+	--color-difficulty-hard: var(--difficulty-hard);
+	--color-difficulty-hard-bg: var(--difficulty-hard-bg);
+	--color-difficulty-hard-border: var(--difficulty-hard-border);
+
+	/* Status colors */
+	--color-status-success: var(--status-success);
+	--color-status-success-bg: var(--status-success-bg);
+	--color-status-warning: var(--status-warning);
+	--color-status-warning-bg: var(--status-warning-bg);
+	--color-status-error: var(--status-error);
+	--color-status-error-bg: var(--status-error-bg);
+	--color-status-info: var(--status-info);
+	--color-status-info-bg: var(--status-info-bg);
+
+	/* Chart colors */
 	--color-chart-1: var(--chart-1);
-	--color-ring: var(--ring);
-	--color-input: var(--input);
-	--color-border: var(--border);
-	--color-destructive: var(--destructive);
-	--color-accent-foreground: var(--accent-foreground);
-	--color-accent: var(--accent);
-	--color-muted-foreground: var(--muted-foreground);
-	--color-muted: var(--muted);
-	--color-secondary-foreground: var(--secondary-foreground);
-	--color-secondary: var(--secondary);
-	--color-primary-foreground: var(--primary-foreground);
-	--color-primary: var(--primary);
-	--color-popover-foreground: var(--popover-foreground);
-	--color-popover: var(--popover);
-	--color-card-foreground: var(--card-foreground);
-	--color-card: var(--card);
+	--color-chart-2: var(--chart-2);
+	--color-chart-3: var(--chart-3);
+	--color-chart-4: var(--chart-4);
+	--color-chart-5: var(--chart-5);
+
+	/* Legacy shadcn/ui compatibility */
+	--color-background: var(--surface-page);
+	--color-foreground: var(--text-primary);
+	--color-card: var(--surface-primary);
+	--color-card-foreground: var(--text-primary);
+	--color-popover: var(--surface-primary);
+	--color-popover-foreground: var(--text-primary);
+	--color-primary: var(--brand-primary);
+	--color-primary-foreground: var(--text-inverse);
+	--color-secondary: var(--surface-secondary);
+	--color-secondary-foreground: var(--text-primary);
+	--color-muted: var(--surface-secondary);
+	--color-muted-foreground: var(--text-tertiary);
+	--color-accent: var(--surface-hover);
+	--color-accent-foreground: var(--text-primary);
+	--color-destructive: var(--status-error);
+	--color-border: var(--border-primary);
+	--color-input: var(--border-primary);
+	--color-ring: var(--brand-primary);
+
+	/* Sidebar colors */
+	--color-sidebar: var(--surface-page);
+	--color-sidebar-foreground: var(--text-primary);
+	--color-sidebar-primary: var(--brand-primary);
+	--color-sidebar-primary-foreground: var(--text-inverse);
+	--color-sidebar-accent: var(--surface-hover);
+	--color-sidebar-accent-foreground: var(--text-primary);
+	--color-sidebar-border: var(--border-secondary);
+	--color-sidebar-ring: var(--brand-primary);
+
+	/* Border radius */
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
 	--radius-xl: calc(var(--radius) + 4px);
+
+	/* Animation */
 	--animate-shiny-text: shiny-text 8s infinite;
 	@keyframes shiny-text {
 		0%,
@@ -55,80 +149,187 @@
 	}
 }
 
+/* ============================================================================
+   LIGHT MODE (Default)
+   ============================================================================ */
+
 :root {
 	--radius: 0.625rem;
-	--background: oklch(0.99 0 0);
-	--foreground: oklch(0.13 0.02 260);
-	--card: oklch(0.99 0 0);
-	--card-foreground: oklch(0.13 0.02 260);
-	--popover: oklch(0.99 0 0);
-	--popover-foreground: oklch(0.13 0.02 260);
-	--primary: oklch(0.55 0.22 280); /* Vibrant Violet */
-	--primary-foreground: oklch(0.98 0 0);
-	--secondary: oklch(0.95 0.02 280);
-	--secondary-foreground: oklch(0.55 0.22 280);
-	--muted: oklch(0.95 0.01 260);
-	--muted-foreground: oklch(0.5 0.02 260);
-	--accent: oklch(0.95 0.02 280);
-	--accent-foreground: oklch(0.55 0.22 280);
-	--destructive: oklch(0.6 0.2 20);
-	--border: oklch(0.9 0.01 260);
-	--input: oklch(0.9 0.01 260);
-	--ring: oklch(0.55 0.22 280);
-	--chart-1: oklch(0.646 0.222 41.116);
-	--chart-2: oklch(0.6 0.118 184.704);
-	--chart-3: oklch(0.398 0.07 227.392);
-	--chart-4: oklch(0.828 0.189 84.429);
-	--chart-5: oklch(0.769 0.188 70.08);
-	--sidebar: oklch(0.985 0 0);
-	--sidebar-foreground: oklch(0.145 0 0);
-	--sidebar-primary: oklch(0.205 0 0);
-	--sidebar-primary-foreground: oklch(0.985 0 0);
-	--sidebar-accent: oklch(0.97 0 0);
-	--sidebar-accent-foreground: oklch(0.205 0 0);
-	--sidebar-border: oklch(0.922 0 0);
-	--sidebar-ring: oklch(0.708 0 0);
+
+	/* Brand Colors - Emerald as primary, Orange as accent */
+	--brand-primary: oklch(0.65 0.19 160);           /* Emerald 500 */
+	--brand-primary-hover: oklch(0.60 0.19 160);     /* Emerald 600 */
+	--brand-primary-muted: oklch(0.90 0.08 160);     /* Emerald 100 */
+	--brand-secondary: oklch(0.55 0.22 280);         /* Violet 500 */
+	--brand-accent: oklch(0.70 0.18 45);             /* Orange 500 */
+	--brand-accent-hover: oklch(0.65 0.18 45);       /* Orange 600 */
+
+	/* Surface Colors (Backgrounds) */
+	--surface-page: oklch(0.985 0 0);                /* Near white */
+	--surface-primary: oklch(0.99 0 0);              /* White */
+	--surface-secondary: oklch(0.97 0.005 260);      /* Light gray */
+	--surface-tertiary: oklch(0.94 0.01 260);        /* Medium gray */
+	--surface-hover: oklch(0.96 0.005 260);          /* Hover state */
+	--surface-active: oklch(0.93 0.01 260);          /* Active state */
+	--surface-selected: oklch(0.92 0.04 160);        /* Selected - emerald tint */
+	--surface-overlay: oklch(0 0 0 / 50%);           /* Modal overlay */
+
+	/* Text Colors */
+	--text-primary: oklch(0.15 0.02 260);            /* Near black */
+	--text-secondary: oklch(0.40 0.02 260);          /* Dark gray */
+	--text-tertiary: oklch(0.55 0.02 260);           /* Medium gray */
+	--text-disabled: oklch(0.70 0.01 260);           /* Light gray */
+	--text-inverse: oklch(0.98 0 0);                 /* White (for dark bg) */
+	--text-link: oklch(0.65 0.19 160);               /* Emerald */
+	--text-link-hover: oklch(0.55 0.19 160);         /* Emerald darker */
+
+	/* Border Colors */
+	--border-primary: oklch(0.88 0.01 260);          /* Default border */
+	--border-secondary: oklch(0.92 0.005 260);       /* Subtle border */
+	--border-focus: oklch(0.65 0.19 160);            /* Focus ring - emerald */
+	--border-error: oklch(0.60 0.20 25);             /* Error border */
+
+	/* Difficulty Colors */
+	--difficulty-easy: oklch(0.65 0.19 160);         /* Emerald */
+	--difficulty-easy-bg: oklch(0.92 0.06 160);
+	--difficulty-easy-border: oklch(0.80 0.10 160);
+	--difficulty-medium: oklch(0.75 0.17 75);        /* Amber/Yellow */
+	--difficulty-medium-bg: oklch(0.92 0.08 75);
+	--difficulty-medium-border: oklch(0.80 0.12 75);
+	--difficulty-hard: oklch(0.60 0.20 25);          /* Red */
+	--difficulty-hard-bg: oklch(0.92 0.06 25);
+	--difficulty-hard-border: oklch(0.80 0.10 25);
+
+	/* Status Colors */
+	--status-success: oklch(0.65 0.19 145);          /* Green */
+	--status-success-bg: oklch(0.92 0.06 145);
+	--status-warning: oklch(0.75 0.17 75);           /* Amber */
+	--status-warning-bg: oklch(0.92 0.08 75);
+	--status-error: oklch(0.60 0.20 25);             /* Red */
+	--status-error-bg: oklch(0.92 0.06 25);
+	--status-info: oklch(0.60 0.15 240);             /* Blue */
+	--status-info-bg: oklch(0.92 0.05 240);
+
+	/* Chart Colors */
+	--chart-1: oklch(0.65 0.19 160);                 /* Emerald */
+	--chart-2: oklch(0.60 0.15 240);                 /* Blue */
+	--chart-3: oklch(0.70 0.18 45);                  /* Orange */
+	--chart-4: oklch(0.55 0.22 280);                 /* Violet */
+	--chart-5: oklch(0.75 0.17 75);                  /* Amber */
 }
 
+/* ============================================================================
+   DARK MODE
+   ============================================================================ */
+
 .dark {
-	--background: oklch(0.1 0.01 260); /* Deep Dark Blue-Grey */
-	--foreground: oklch(0.98 0 0);
-	--card: oklch(0.12 0.01 260);
-	--card-foreground: oklch(0.98 0 0);
-	--popover: oklch(0.12 0.01 260);
-	--popover-foreground: oklch(0.98 0 0);
-	--primary: oklch(0.65 0.22 280); /* Electric Violet */
-	--primary-foreground: oklch(0.98 0 0);
-	--secondary: oklch(0.2 0.05 280);
-	--secondary-foreground: oklch(0.98 0 0);
-	--muted: oklch(0.2 0.02 260);
-	--muted-foreground: oklch(0.7 0.02 260);
-	--accent: oklch(0.2 0.05 280);
-	--accent-foreground: oklch(0.98 0 0);
-	--destructive: oklch(0.6 0.2 20);
-	--border: oklch(0.2 0.02 260);
-	--input: oklch(0.2 0.02 260);
-	--ring: oklch(0.65 0.22 280);
-	--chart-1: oklch(0.488 0.243 264.376);
-	--chart-2: oklch(0.696 0.17 162.48);
-	--chart-3: oklch(0.769 0.188 70.08);
-	--chart-4: oklch(0.627 0.265 303.9);
-	--chart-5: oklch(0.645 0.246 16.439);
-	--sidebar: oklch(0.205 0 0);
-	--sidebar-foreground: oklch(0.985 0 0);
-	--sidebar-primary: oklch(0.488 0.243 264.376);
-	--sidebar-primary-foreground: oklch(0.985 0 0);
-	--sidebar-accent: oklch(0.269 0 0);
-	--sidebar-accent-foreground: oklch(0.985 0 0);
-	--sidebar-border: oklch(1 0 0 / 10%);
-	--sidebar-ring: oklch(0.556 0 0);
+	/* Brand Colors - Brighter for dark mode */
+	--brand-primary: oklch(0.72 0.19 160);           /* Brighter Emerald */
+	--brand-primary-hover: oklch(0.78 0.19 160);     /* Even brighter */
+	--brand-primary-muted: oklch(0.25 0.08 160);     /* Dark emerald tint */
+	--brand-secondary: oklch(0.70 0.22 280);         /* Brighter Violet */
+	--brand-accent: oklch(0.75 0.18 45);             /* Brighter Orange */
+	--brand-accent-hover: oklch(0.80 0.18 45);       /* Even brighter */
+
+	/* Surface Colors (Backgrounds) - Dark theme */
+	--surface-page: oklch(0.09 0.01 260);            /* Deep dark */
+	--surface-primary: oklch(0.12 0.01 260);         /* Card background */
+	--surface-secondary: oklch(0.16 0.015 260);      /* Elevated surface */
+	--surface-tertiary: oklch(0.20 0.02 260);        /* More elevated */
+	--surface-hover: oklch(0.18 0.015 260);          /* Hover state */
+	--surface-active: oklch(0.22 0.02 260);          /* Active state */
+	--surface-selected: oklch(0.18 0.06 160);        /* Selected - emerald tint */
+	--surface-overlay: oklch(0 0 0 / 70%);           /* Modal overlay */
+
+	/* Text Colors - Adjusted for dark mode */
+	--text-primary: oklch(0.95 0.01 260);            /* Near white */
+	--text-secondary: oklch(0.75 0.02 260);          /* Light gray */
+	--text-tertiary: oklch(0.55 0.02 260);           /* Medium gray */
+	--text-disabled: oklch(0.40 0.01 260);           /* Dark gray */
+	--text-inverse: oklch(0.10 0.02 260);            /* Near black */
+	--text-link: oklch(0.72 0.19 160);               /* Emerald */
+	--text-link-hover: oklch(0.80 0.19 160);         /* Brighter emerald */
+
+	/* Border Colors - Dark theme */
+	--border-primary: oklch(0.25 0.02 260);          /* Default border */
+	--border-secondary: oklch(0.20 0.015 260);       /* Subtle border */
+	--border-focus: oklch(0.72 0.19 160);            /* Focus ring */
+	--border-error: oklch(0.60 0.20 25);             /* Error border */
+
+	/* Difficulty Colors - Brighter for dark mode */
+	--difficulty-easy: oklch(0.72 0.19 160);         /* Brighter Emerald */
+	--difficulty-easy-bg: oklch(0.20 0.06 160);
+	--difficulty-easy-border: oklch(0.35 0.10 160);
+	--difficulty-medium: oklch(0.80 0.17 75);        /* Brighter Amber */
+	--difficulty-medium-bg: oklch(0.22 0.08 75);
+	--difficulty-medium-border: oklch(0.40 0.12 75);
+	--difficulty-hard: oklch(0.65 0.20 25);          /* Brighter Red */
+	--difficulty-hard-bg: oklch(0.20 0.06 25);
+	--difficulty-hard-border: oklch(0.35 0.10 25);
+
+	/* Status Colors - Brighter for dark mode */
+	--status-success: oklch(0.72 0.19 145);
+	--status-success-bg: oklch(0.20 0.06 145);
+	--status-warning: oklch(0.80 0.17 75);
+	--status-warning-bg: oklch(0.22 0.08 75);
+	--status-error: oklch(0.65 0.20 25);
+	--status-error-bg: oklch(0.20 0.06 25);
+	--status-info: oklch(0.68 0.15 240);
+	--status-info-bg: oklch(0.20 0.05 240);
+
+	/* Chart Colors - Brighter for dark mode */
+	--chart-1: oklch(0.72 0.19 160);
+	--chart-2: oklch(0.68 0.15 240);
+	--chart-3: oklch(0.75 0.18 45);
+	--chart-4: oklch(0.70 0.22 280);
+	--chart-5: oklch(0.80 0.17 75);
 }
+
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
 
 @layer base {
 	* {
-		@apply border-border outline-ring/50;
+		@apply border-border-primary outline-brand-primary/50;
 	}
+
 	body {
-		@apply bg-background text-foreground;
+		@apply bg-surface-page text-text-primary;
+		font-feature-settings: "rlig" 1, "calt" 1;
+	}
+
+	/* Smooth transitions for theme switching */
+	html {
+		transition: background-color 0.3s ease, color 0.3s ease;
+	}
+
+	html.dark {
+		color-scheme: dark;
+	}
+
+	html:not(.dark) {
+		color-scheme: light;
+	}
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+@layer utilities {
+	/* Focus visible styles */
+	.focus-ring {
+		@apply outline-none ring-2 ring-brand-primary ring-offset-2 ring-offset-surface-page;
+	}
+
+	/* Gradient text using brand colors */
+	.text-gradient-brand {
+		@apply bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent;
+	}
+
+	/* Card hover effect */
+	.card-hover {
+		@apply transition-all duration-200 hover:bg-surface-hover hover:border-border-primary;
 	}
 }

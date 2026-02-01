@@ -21,7 +21,7 @@ export default function GfgCompanyLogos({ companies }: CompanyLogosProps) {
 				/>
 			))}
 			{companies.length > 3 && (
-				<span className="text-sm text-zinc-500">+{companies.length - 3}</span>
+				<span className="text-sm text-text-tertiary">+{companies.length - 3}</span>
 			)}
 		</div>
 	);

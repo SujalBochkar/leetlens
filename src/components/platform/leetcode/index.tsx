@@ -8,11 +8,11 @@ export default function Leetcode() {
 	return (
 		<div>
 			<NavBar />
-			<div className="my-6">
-				<LCBanner />
-			</div>
-			<div className="max-w-[110rem] mx-auto">
-				<main className="mx-auto px-4">
+			<div className="max-w-[110rem] mx-auto px-4">
+				<div className="my-6">
+					<LCBanner />
+				</div>
+				<main>
 					<div className="flex gap-4 justify-between">
 						<CompaniesSearch />
 						<ProblemTable />

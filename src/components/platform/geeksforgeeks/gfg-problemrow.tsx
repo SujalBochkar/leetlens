@@ -13,22 +13,25 @@ interface ProblemRowProps {
 
 export default function GfgProblemRow({ problem }: ProblemRowProps) {
 	return (
-		<tr className="border-b border-zinc-800 transition-colors hover:bg-zinc-800/50">
+		<tr className="border-b border-border-primary transition-colors hover:bg-surface-hover">
 			<td className="p-4">
 				<input
 					type="checkbox"
 					checked={problem.isCompleted}
-					className="h-4 w-4 rounded border-zinc-700 bg-zinc-900"
+					className="h-4 w-4 rounded border-border-primary bg-surface-secondary"
 					onChange={() => {}}
 				/>
 			</td>
-			<td className="p-4 text-zinc-400">{problem.id}</td>
+			<td className="p-4 text-text-tertiary">{problem.id}</td>
 			<td className="p-4">
-				<Link href={`/gfg/problems/${problem.id}`} className="text-zinc-100 hover:text-blue-500">
+				<Link
+					href={`/gfg/problems/${problem.id}`}
+					className="text-text-primary hover:text-text-link"
+				>
 					{problem.title}
 				</Link>
 			</td>
-			<td className="p-4 text-zinc-300">{problem.category}</td>
+			<td className="p-4 text-text-secondary">{problem.category}</td>
 			<td className="p-4">
 				<GfgDifficultyBadge difficulty={problem.difficulty} />
 			</td>

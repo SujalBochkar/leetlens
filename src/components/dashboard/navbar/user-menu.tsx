@@ -36,7 +36,7 @@ export const UserMenu = () => {
 						className="rounded-full hover:opacity-80 transition-opacity"
 					/>
 				) : (
-					<div className="w-10 h-10 rounded-full bg-primary flex bg-background/50 items-center justify-center text-primary-foreground">
+					<div className="w-10 h-10 rounded-full bg-background/50 flex items-center justify-center text-primary-foreground">
 						{session.user?.name?.[0] || 'U'}
 					</div>
 				)}

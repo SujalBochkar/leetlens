@@ -11,12 +11,13 @@ datasource db {
 }
 
 model Problem {
-    id             String  @id @default(cuid())
-    questionNumber String? @unique // LeetCode's questionFrontendId (e.g. "1", "2", etc.)
-    title          String
-    titleSlug      String  @unique
-    difficulty     String?
-    acceptanceRate Float?
+    id                 String  @id @default(cuid())
+    questionNumber     String? @unique // LeetCode's questionFrontendId (e.g. "1", "2", etc.)
+    questionNumberInt  Int?    // Numeric version for efficient sorting
+    title              String
+    titleSlug          String  @unique
+    difficulty         String?
+    acceptanceRate     Float?
 
     // LeetCode flags
     hasSolution      Boolean @default(false)
@@ -33,6 +34,11 @@ model Problem {
     // Relations
     companyStats          CompanyProblem[]
     userProblemProgresses UserProblemProgress[]
+
+    // Index for faster sorting
+    @@index([questionNumberInt])
+    @@index([difficulty])
+    @@index([acceptanceRate])
 }
 
 model Topic {

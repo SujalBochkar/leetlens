@@ -15,7 +15,7 @@ export function CnSearchBar({ onSearch }: SearchBarProps) {
 				</div>
 				<input
 					type="text"
-					className="block w-full rounded-md border-none bg-fill-3 dark:bg-dark-fill-3 pl-10 pr-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+					className="block w-full rounded-md border border-border-primary bg-surface-secondary pl-10 pr-3 py-2 text-sm placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-border-focus"
 					placeholder="Search questions..."
 					onChange={(e) => onSearch(e.target.value)}
 				/>

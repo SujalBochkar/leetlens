@@ -41,13 +41,13 @@ export default function LcCompanyCard({
 					<span className="text-base">{questionCount} questions</span>
 				</div>
 				<div className="grid grid-cols-1 gap-3 text-base">
-					<span className="text-green-500 border border-green-500/20 bg-green-500/10 px-4 py-2 rounded-full text-center whitespace-nowrap">
+					<span className="text-difficulty-easy border border-difficulty-easy-border bg-difficulty-easy-bg px-4 py-2 rounded-full text-center whitespace-nowrap">
 						{easyCount} Easy
 					</span>
-					<span className="text-yellow-500 border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 rounded-full text-center whitespace-nowrap">
+					<span className="text-difficulty-medium border border-difficulty-medium-border bg-difficulty-medium-bg px-4 py-2 rounded-full text-center whitespace-nowrap">
 						{mediumCount} Medium
 					</span>
-					<span className="text-red-500 border border-red-500/20 bg-red-500/10 px-4 py-2 rounded-full text-center whitespace-nowrap">
+					<span className="text-difficulty-hard border border-difficulty-hard-border bg-difficulty-hard-bg px-4 py-2 rounded-full text-center whitespace-nowrap">
 						{hardCount} Hard
 					</span>
 				</div>

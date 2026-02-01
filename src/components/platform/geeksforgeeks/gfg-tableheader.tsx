@@ -11,17 +11,17 @@ interface TableHeaderProps {
 export default function GfgTableHeader({ sortConfig, onSort }: TableHeaderProps) {
 	return (
 		<thead>
-			<tr className="border-b border-zinc-800">
-				<th className="h-12 w-[60px] px-4 text-left align-middle font-medium text-zinc-400">
+			<tr className="border-b border-border-primary bg-surface-secondary">
+				<th className="h-12 w-[60px] px-4 text-left align-middle font-medium text-text-tertiary">
 					Status
 				</th>
-				<th className="h-12 w-[60px] px-4 text-left align-middle font-medium text-zinc-400">
+				<th className="h-12 w-[60px] px-4 text-left align-middle font-medium text-text-tertiary">
 					<GfgSortButton label="#" sortKey="id" currentSort={sortConfig} onSort={onSort} />
 				</th>
-				<th className="h-12 px-4 text-left align-middle font-medium text-zinc-400">
+				<th className="h-12 px-4 text-left align-middle font-medium text-text-tertiary">
 					<GfgSortButton label="Title" sortKey="title" currentSort={sortConfig} onSort={onSort} />
 				</th>
-				<th className="h-12 px-4 text-left align-middle font-medium text-zinc-400">
+				<th className="h-12 px-4 text-left align-middle font-medium text-text-tertiary">
 					<GfgSortButton
 						label="Category"
 						sortKey="category"
@@ -29,7 +29,7 @@ export default function GfgTableHeader({ sortConfig, onSort }: TableHeaderProps)
 						onSort={onSort}
 					/>
 				</th>
-				<th className="h-12 px-4 text-left align-middle font-medium text-zinc-400">
+				<th className="h-12 px-4 text-left align-middle font-medium text-text-tertiary">
 					<GfgSortButton
 						label="Difficulty"
 						sortKey="difficulty"
@@ -37,7 +37,7 @@ export default function GfgTableHeader({ sortConfig, onSort }: TableHeaderProps)
 						onSort={onSort}
 					/>
 				</th>
-				<th className="h-12 px-4 text-center align-middle font-medium text-zinc-400">
+				<th className="h-12 px-4 text-center align-middle font-medium text-text-tertiary">
 					<GfgSortButton
 						label="Companies"
 						sortKey="companiesCount"
@@ -46,9 +46,13 @@ export default function GfgTableHeader({ sortConfig, onSort }: TableHeaderProps)
 						className="justify-center mx-auto"
 					/>
 				</th>
-				<th className="h-12 px-4 text-center align-middle font-medium text-zinc-400">Solutions</th>
-				<th className="h-12 px-4 text-center align-middle font-medium text-zinc-400">Hints</th>
-				<th className="h-12 px-4 text-center align-middle font-medium text-zinc-400">AI Help</th>
+				<th className="h-12 px-4 text-center align-middle font-medium text-text-tertiary">
+					Solutions
+				</th>
+				<th className="h-12 px-4 text-center align-middle font-medium text-text-tertiary">Hints</th>
+				<th className="h-12 px-4 text-center align-middle font-medium text-text-tertiary">
+					AI Help
+				</th>
 			</tr>
 		</thead>
 	);

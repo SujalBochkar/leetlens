@@ -9,25 +9,23 @@ interface TableHeaderProps {
 export default function LcTableHeader({ sortConfig, onSort }: TableHeaderProps) {
 	return (
 		<thead>
-			<tr className="border-b border-zinc-800">
-				<th className="h-12 w-[60px] px-4 text-left align-middle font-medium text-zinc-400">
+			<tr className="border-b border-border-primary bg-surface-secondary">
+				<th className="h-12 w-[60px] px-4 text-left align-middle font-medium text-text-tertiary">
 					Status
 				</th>
-				<th className="h-12 w-[60px] px-4 text-left align-middle font-medium text-zinc-400">
-					<LcSortButton label="#" sortKey="id" currentSort={sortConfig} onSort={onSort} />
-				</th>
-				<th className="h-12 px-4 text-left align-middle font-medium text-zinc-400">
-					<LcSortButton label="Title" sortKey="title" currentSort={sortConfig} onSort={onSort} />
-				</th>
-				<th className="h-12 px-4 text-left align-middle font-medium text-zinc-400">
+				<th className="h-12 w-[60px] px-4 text-left align-middle font-medium text-text-tertiary">
 					<LcSortButton
-						label="Category"
-						sortKey="category"
+						label="#"
+						sortKey="questionNumber"
 						currentSort={sortConfig}
 						onSort={onSort}
 					/>
 				</th>
-				<th className="h-12 px-4 text-left align-middle font-medium text-zinc-400">
+				<th className="h-12 px-4 text-left align-middle font-medium text-text-tertiary">
+					<LcSortButton label="Title" sortKey="title" currentSort={sortConfig} onSort={onSort} />
+				</th>
+				<th className="h-12 px-4 text-left align-middle font-medium text-text-tertiary">Topic</th>
+				<th className="h-12 px-4 text-left align-middle font-medium text-text-tertiary">
 					<LcSortButton
 						label="Difficulty"
 						sortKey="difficulty"
@@ -35,7 +33,7 @@ export default function LcTableHeader({ sortConfig, onSort }: TableHeaderProps) 
 						onSort={onSort}
 					/>
 				</th>
-				<th className="h-12 px-4 text-center align-middle font-medium text-zinc-400">
+				<th className="h-12 px-4 text-center align-middle font-medium text-text-tertiary">
 					<LcSortButton
 						label="Acceptance"
 						sortKey="acceptance"
@@ -44,7 +42,7 @@ export default function LcTableHeader({ sortConfig, onSort }: TableHeaderProps) 
 						className="justify-center mx-auto"
 					/>
 				</th>
-				<th className="h-12 px-4 text-center align-middle font-medium text-zinc-400">
+				<th className="h-12 px-4 text-center align-middle font-medium text-text-tertiary">
 					<LcSortButton
 						label="Companies"
 						sortKey="companiesCount"
@@ -53,26 +51,12 @@ export default function LcTableHeader({ sortConfig, onSort }: TableHeaderProps) 
 						className="justify-center mx-auto"
 					/>
 				</th>
-				<th className="h-12 px-4 text-center align-middle font-medium text-zinc-400">
-					<LcSortButton
-						label="Submissions"
-						sortKey="totalSubmitted"
-						currentSort={sortConfig}
-						onSort={onSort}
-						className="justify-center mx-auto"
-					/>
+				<th className="h-12 px-4 text-center align-middle font-medium text-text-tertiary">
+					Solution
 				</th>
-				<th className="h-12 px-4 text-center align-middle font-medium text-zinc-400">
-					<LcSortButton
-						label="Accepted"
-						sortKey="totalAccepted"
-						currentSort={sortConfig}
-						onSort={onSort}
-						className="justify-center mx-auto"
-					/>
+				<th className="h-12 px-4 text-center align-middle font-medium text-text-tertiary">
+					AI Help
 				</th>
-				<th className="h-12 px-4 text-center align-middle font-medium text-zinc-400">Hints</th>
-				<th className="h-12 px-4 text-center align-middle font-medium text-zinc-400">AI Help</th>
 			</tr>
 		</thead>
 	);

@@ -6,15 +6,18 @@ interface DifficultyBadgeProps {
 
 export default function LcDifficultyBadge({ difficulty }: DifficultyBadgeProps) {
 	const getDifficultyColor = (difficulty: LCProblem['difficulty']) => {
+		const baseStyles =
+			'inline-flex items-center gap-1.5 before:w-1.5 before:h-1.5 before:rounded-full px-2.5 py-1 rounded-full border';
+
 		switch (difficulty) {
 			case 'Easy':
-				return 'text-green-500 border border-green-500/20 bg-green-500/10 inline-flex items-center gap-1.5 before:w-1.5 before:h-1.5 before:rounded-full before:bg-green-500 px-2.5 py-1 rounded-full';
+				return `${baseStyles} text-difficulty-easy border-difficulty-easy-border bg-difficulty-easy-bg before:bg-difficulty-easy`;
 			case 'Medium':
-				return 'text-yellow-500 border border-yellow-500/20 bg-yellow-500/10 inline-flex items-center gap-1.5 before:w-1.5 before:h-1.5 before:rounded-full before:bg-yellow-500 px-2.5 py-1 rounded-full';
+				return `${baseStyles} text-difficulty-medium border-difficulty-medium-border bg-difficulty-medium-bg before:bg-difficulty-medium`;
 			case 'Hard':
-				return 'text-red-500 border border-red-500/20 bg-red-500/10 inline-flex items-center gap-1.5 before:w-1.5 before:h-1.5 before:rounded-full before:bg-red-500 px-2.5 py-1 rounded-full';
+				return `${baseStyles} text-difficulty-hard border-difficulty-hard-border bg-difficulty-hard-bg before:bg-difficulty-hard`;
 			default:
-				return '';
+				return baseStyles;
 		}
 	};
 
